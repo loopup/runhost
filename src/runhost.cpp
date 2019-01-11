@@ -35,41 +35,6 @@ BOOL WINAPI OnConsoleHandler(DWORD dwCtrlType)
 }
 
 
-int main(int argc, char** argv)
-{
-	using namespace std;
-
-	// The following should fire under unix/linux.
-	signal(SIGABRT, SignalHandler);
-	signal(SIGTERM, SignalHandler);
-	signal(SIGBREAK, SignalHandler);
-	signal(SIGABRT_COMPAT, SignalHandler);
-	signal(SIGINT, SignalHandler);
-	// Specifically for commanline applications; docker engine on windows should fire here.
-	SetConsoleCtrlHandler(OnConsoleHandler, TRUE);
-
-#ifdef _DEBUG
-	cout << "argc: " << argc << endl;
-	for (int i = 0; i < argc; i++)
-	{
-		cout << "[" << i << "] - " << argv[i] << endl;
-	}
-#endif
-
-	char x{};
-
-	do
-	{
-		cout << "Waiting for signal (or hit `q` to quit)..";
-		x = getchar();
-	} while (x != 'q');
-
-	cout << endl
-		 << "Bye, bye." << endl;
-
-	return 0;
-}
-
 void ServiceControlShutdown(const char* arg_ServiceName)
 {
 	SC_HANDLE	  myService = NULL;
@@ -136,4 +101,49 @@ void ServiceControlStart(const char* arg_ServiceName)
 
 		CloseServiceHandle(mySCM);
 	}
+}
+
+
+int main(int argc, char** argv)
+{
+	using namespace std;
+
+	// The following should fire under unix/linux.
+	signal(SIGABRT, SignalHandler);
+	signal(SIGTERM, SignalHandler);
+	signal(SIGBREAK, SignalHandler);
+	signal(SIGABRT_COMPAT, SignalHandler);
+	signal(SIGINT, SignalHandler);
+	// Specifically for commanline applications; docker engine on windows should fire here.
+	SetConsoleCtrlHandler(OnConsoleHandler, TRUE);
+
+#ifdef _DEBUG
+	cout << "argc: " << argc << endl;
+	for (int i = 0; i < argc; i++)
+	{
+		cout << "[" << i << "] - " << argv[i] << endl;
+	}
+#endif
+
+	if( argc > 1 )
+	{
+		// The first parameter should be the name of the service.
+		// It should be provided as "name of service" in quotes in case you have space in the name.
+		cout << "Attempting to start `" << argv[1] << "`..";
+		ServiceControlStart( argv[1] );
+		cout << endl;
+	}
+
+	char x{};
+
+	do
+	{
+		cout << "Waiting for signal (or hit `q` to quit)..";
+		x = getchar();
+	} while (x != 'q');
+
+	cout << endl
+		 << "Bye, bye." << endl;
+
+	return 0;
 }

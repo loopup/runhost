@@ -5,6 +5,13 @@ VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "runhost", "src\runhost.vcxproj", "{C3653248-943A-454F-AEBE-791D56F3BF07}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{20AA6B40-006E-4C37-AA45-791A432CD7BB}"
+	ProjectSection(SolutionItems) = preProject
+		.clang-format = .clang-format
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
